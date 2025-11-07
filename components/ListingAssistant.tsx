@@ -1,0 +1,109 @@
+
+import React, { useState, useEffect } from 'react';
+import { getListingSuggestions } from '../services/geminiService';
+import { ListingSuggestions } from '../types';
+import { MOCK_SUPPLIERS } from '../constants'; // Using mock for country info
+
+interface ListingAssistantProps {
+  productData: { title: string; description: string; category: string };
+  onApplySuggestion: (field: 'title' | 'description', value: string) => void;
+}
+
+const LoadingSpinner: React.FC = () => (
+    <div className="flex justify-center items-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-lime"></div>
+    </div>
+);
+
+
+const ListingAssistant: React.FC<ListingAssistantProps> = ({ productData, onApplySuggestion }) => {
+  const [suggestions, setSuggestions] = useState<ListingSuggestions | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchSuggestions = async () => {
+    if (!productData.title || !productData.description) {
+        setError("Please provide a title and description first.");
+        return;
+    }
+    setIsLoading(true);
+    setError(null);
+    setSuggestions(null);
+    try {
+      // Mocking supplier's country for the API call
+      const mockSupplierCountry = MOCK_SUPPLIERS[0].country;
+      const result = await getListingSuggestions(productData, mockSupplierCountry);
+      setSuggestions(result);
+    } catch (err) {
+      console.error("Listing suggestion failed:", err);
+      setError("Failed to get suggestions. Please ensure your API key is configured and try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="p-4 border border-dark-gray bg-black/20">
+      <p className="text-sm text-medium-gray mb-4">
+        Use Gemini to enhance your product listing. Based on your inputs and market data, the AI will suggest an optimized title, description, and keywords.
+      </p>
+      
+      {!suggestions && !isLoading && (
+        <div className="text-center">
+            <button
+                onClick={fetchSuggestions}
+                disabled={!productData.title || !productData.description}
+                className="px-6 py-2 bg-primary-cyan text-black font-bold border-2 border-black disabled:bg-dark-gray disabled:text-medium-gray disabled:cursor-not-allowed"
+            >
+                GENERATE SUGGESTIONS
+            </button>
+             {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
+        </div>
+      )}
+
+      {isLoading && (
+         <div>
+            <LoadingSpinner />
+            <p className="mt-2 text-center text-xs text-medium-gray">Analyzing market data & generating listing...</p>
+        </div>
+      )}
+      
+      {suggestions && (
+        <div className="space-y-4 text-sm">
+            <div>
+                <h4 className="font-bold text-primary-cyan">LOCATION INSIGHT</h4>
+                <p className="text-xs italic text-medium-gray">{suggestions.locationInsight}</p>
+            </div>
+            <div>
+                <h4 className="font-bold text-primary-cyan">SUGGESTED TITLE</h4>
+                <div className="p-2 bg-black/30 border border-dark-gray flex justify-between items-center">
+                    <p>{suggestions.suggestedTitle}</p>
+                    <button onClick={() => onApplySuggestion('title', suggestions.suggestedTitle)} className="text-xs bg-dark-gray px-2 py-1 hover:bg-primary-lime hover:text-black">APPLY</button>
+                </div>
+            </div>
+             <div>
+                <h4 className="font-bold text-primary-cyan">SUGGESTED DESCRIPTION</h4>
+                <div className="p-2 bg-black/30 border border-dark-gray">
+                    <p className="mb-2">{suggestions.suggestedDescription}</p>
+                    <button onClick={() => onApplySuggestion('description', suggestions.suggestedDescription)} className="text-xs bg-dark-gray px-2 py-1 hover:bg-primary-lime hover:text-black">APPLY</button>
+                </div>
+            </div>
+             <div>
+                <h4 className="font-bold text-primary-cyan">SUGGESTED KEYWORDS</h4>
+                <div className="flex flex-wrap gap-2">
+                    {suggestions.suggestedKeywords.map(kw => (
+                        <span key={kw} className="bg-dark-gray text-primary-lime text-xs px-2 py-1">{kw}</span>
+                    ))}
+                </div>
+            </div>
+            <div className="text-center">
+                <button onClick={fetchSuggestions} className="text-xs text-primary-cyan hover:underline">Regenerate</button>
+            </div>
+        </div>
+      )}
+
+    </div>
+  );
+};
+
+export default ListingAssistant;

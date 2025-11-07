@@ -1,0 +1,7 @@
+{
+  "name": "Borderless SKU Lab",
+  "description": "A live, verification-first micro-sourcing and export-prep marketplace that turns local production runs into trustable, shippable, and market-listed products for buyers worldwide.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
