@@ -1,6 +1,6 @@
 
-import { GoogleGenAI, Type, Chat } from "@google/genai";
-import { QualityAnalysisResult, ListingSuggestions } from '../types';
+import { GoogleGenAI, Type, Chat, FunctionDeclaration } from "@google/genai";
+import { QualityAnalysisResult, ListingSuggestions, SearchFilters } from '../types';
 
 const API_KEY = process.env.API_KEY;
 
@@ -48,6 +48,40 @@ const listingSuggestionSchema = {
     },
     required: ["suggestedTitle", "suggestedDescription", "suggestedKeywords", "locationInsight"],
 }
+
+const searchFiltersSchema = {
+    type: Type.OBJECT,
+    properties: {
+        searchTerm: { type: Type.STRING, description: "Keywords for general text search within title and description." },
+        countries: { type: Type.ARRAY, items: { type: Type.STRING }, description: "List of countries mentioned in the query." },
+        category: { type: Type.STRING, description: "The product category mentioned." },
+        maxPrice: { type: Type.NUMBER, description: "The maximum unit price." },
+        minPrice: { type: Type.NUMBER, description: "The minimum unit price." },
+        maxMoq: { type: Type.NUMBER, description: "The maximum Minimum Order Quantity." },
+        minMoq: { type: Type.NUMBER, description: "The minimum Minimum Order Quantity." },
+        sortBy: { type: Type.STRING, enum: ['price_asc', 'price_desc', 'quality_asc'], description: "How the results should be sorted." },
+    },
+};
+
+const draftOfferFunctionDeclaration: FunctionDeclaration = {
+    name: 'draftOffer',
+    parameters: {
+        type: Type.OBJECT,
+        description: 'Drafts a negotiation offer for a product.',
+        properties: {
+            quantity: {
+                type: Type.NUMBER,
+                description: 'The number of units the user wants to order.',
+            },
+            price: {
+                type: Type.NUMBER,
+                description: 'The price per unit the user is offering.',
+            },
+        },
+        required: ['quantity', 'price'],
+    },
+};
+
 
 // Function for Image Analysis
 export const analyzeProductImage = async (base64ImageData: string, mimeType: string): Promise<QualityAnalysisResult> => {
@@ -110,24 +144,56 @@ export const getListingSuggestions = async (productData: { title: string, descri
     }
 };
 
-// Function for Chatbot
-export const chatWithBot = async (message: string): Promise<string> => {
+// Function to parse natural language search query
+export const parseSearchQuery = async (query: string): Promise<SearchFilters> => {
     if (!ai) throw new Error("API_KEY not configured.");
-    if (!chat) {
-        chat = ai.chats.create({
-            model: 'gemini-2.5-pro',
+    const model = 'gemini-2.5-flash';
+    const prompt = `You are an intelligent search query parser for a B2B marketplace of handcrafted goods. Parse the user's query and extract any specified filters. The available countries are: Kenya, Nigeria, Vietnam, Ghana, Morocco, India, Peru.
+
+    User query: "${query}"
+
+    Return a JSON object with the extracted filters. Possible filters are: searchTerm, countries, category, maxPrice, minPrice, maxMoq, minMoq, sortBy. If a filter is not mentioned, omit it from the object.`;
+    
+    try {
+        const response = await ai.models.generateContent({
+            model: model,
+            contents: prompt,
             config: {
-                systemInstruction: "You are a helpful assistant for the Borderless SKU Lab, a B2B marketplace for handcrafted goods. Your name is 'SKU-Bot'. You can answer questions about the platform, sourcing, logistics, and help users find products. Be concise and professional, with a slightly futuristic, 'cyberpunk' tone. Use markdown for formatting.",
+                responseMimeType: "application/json",
+                responseSchema: searchFiltersSchema,
             }
         });
+        const jsonString = response.text.trim();
+        return JSON.parse(jsonString);
+    } catch (error) {
+        console.error("Error calling Gemini API for search query parsing:", error);
+        throw new Error("Failed to parse search query with Gemini API.");
     }
+};
+
+
+// Function for Chatbot
+export const chatWithBot = async (message: string, systemInstruction: string) => {
+    if (!ai) throw new Error("API_KEY not configured.");
+    // We re-initialize the chat for each new context to update the system instruction.
+    // In a real app, you might manage chat histories differently.
+    chat = ai.chats.create({
+        model: 'gemini-2.5-pro',
+        config: {
+            systemInstruction,
+            tools: [{ functionDeclarations: [draftOfferFunctionDeclaration] }],
+        }
+    });
 
     try {
         const response = await chat.sendMessage({ message });
+        if (response.functionCalls && response.functionCalls.length > 0) {
+            const fc = response.functionCalls[0];
+            return `[FUNCTION_CALL] ${JSON.stringify(fc)}`;
+        }
         return response.text;
     } catch (error) {
         console.error("Error in chat session:", error);
-        // Reset chat on error
         chat = null;
         throw new Error("Chat session failed.");
     }

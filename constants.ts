@@ -1,5 +1,4 @@
-
-import { ProductBatch, Supplier } from './types';
+import { ProductBatch, Supplier, AnalyticsV2, MarketTrendData } from './types';
 
 export const MOCK_SUPPLIERS: Supplier[] = [
   { id: 'supp_ken_01', name: 'Nairobi Leather Artisans', country: 'Kenya', verificationStatus: 'Verified', rating: 4.8, memberSince: '2022-03-15', bio: 'A collective of skilled leatherworkers from Nairobi, specializing in traditional techniques passed down through generations. We focus on sustainable sourcing and high-quality craftsmanship.' },
@@ -17,6 +16,7 @@ export const MOCK_SUPPLIERS: Supplier[] = [
 export const MOCK_PRODUCTS: ProductBatch[] = [
   {
     supplierId: 'supp_ken_01',
+    country: 'Kenya',
     title: 'Hand-Stitched Leather Wallet',
     category: 'Textile Accessories',
     description: 'A premium, full-grain leather wallet, hand-stitched by artisans in Nairobi. Features 6 card slots and a main bill compartment. Built to last a lifetime.',
@@ -24,8 +24,8 @@ export const MOCK_PRODUCTS: ProductBatch[] = [
     specs: { 'Dimensions': '11cm x 9cm', 'Weight': '80g', 'Color': 'Tan Brown' },
     moq: 25,
     leadTimeDays: 14,
-    images: ['https://images.unsplash.com/photo-1619458991960-ab2d17215263?q=80&w=2070&auto=format&fit=crop', 'https://images.unsplash.com/photo-1615437632141-196c3a1bd34a?q=80&w=2070&auto=format&fit=crop', 'https://images.unsplash.com/photo-1620625513874-4a23b5d6a36c?q=80&w=1974&auto=format&fit=crop'],
-    videoUrl: 'https://example.com/video.mp4',
+    images: ['/assets/product-leather-wallet-01.jpg', '/assets/product-leather-wallet-02.jpg', '/assets/product-leather-wallet-03.jpg'],
+    videoUrl: '/assets/product-leather-wallet.mp4',
     productId: 'prod_001',
     id: 'batch_001',
     qtyAvailable: 150,
@@ -35,6 +35,7 @@ export const MOCK_PRODUCTS: ProductBatch[] = [
   },
   {
     supplierId: 'supp_nga_01',
+    country: 'Nigeria',
     title: 'Adire Patterned Silk Scarf',
     category: 'Textile Accessories',
     description: 'Vibrant silk scarf featuring traditional Adire dyeing techniques from Nigeria. Each piece is unique, offering a bold statement of color and culture.',
@@ -42,7 +43,7 @@ export const MOCK_PRODUCTS: ProductBatch[] = [
     specs: { 'Dimensions': '180cm x 70cm', 'Care': 'Hand wash cold' },
     moq: 50,
     leadTimeDays: 21,
-    images: ['https://images.unsplash.com/photo-1596903268831-a0e2a2a1f0a0?q=80&w=1935&auto=format&fit=crop', 'https://images.unsplash.com/photo-1610424251211-2d7c5b6b1070?q=80&w=1935&auto=format&fit=crop'],
+    images: ['/assets/product-adire-scarf-01.jpg', '/assets/product-adire-scarf-02.jpg'],
     productId: 'prod_002',
     id: 'batch_002',
     qtyAvailable: 300,
@@ -52,6 +53,7 @@ export const MOCK_PRODUCTS: ProductBatch[] = [
   },
     {
     supplierId: 'supp_mar_01',
+    country: 'Morocco',
     title: 'Moroccan Leather Pouf',
     category: 'Home Goods',
     description: 'Handmade leather pouf from Marrakech, perfect as a footstool or extra seating. Stuffed with dense cotton for firm support. Intricate embroidered detailing.',
@@ -59,7 +61,8 @@ export const MOCK_PRODUCTS: ProductBatch[] = [
     specs: { 'Diameter': '55cm', 'Height': '35cm', 'Color': 'Natural Tan' },
     moq: 10,
     leadTimeDays: 25,
-    images: ['https://images.unsplash.com/photo-1593132223537-67230235c5a8?q=80&w=1964&auto=format&fit=crop', 'https://images.unsplash.com/photo-1593132223588-212a401c440a?q=80&w=1964&auto=format&fit=crop'],
+    images: ['/assets/product-moroccan-pouf-01.jpg', '/assets/product-moroccan-pouf-02.jpg'],
+    modelUrl: '/assets/product-pouf-model.glb',
     productId: 'prod_007',
     id: 'batch_007',
     qtyAvailable: 40,
@@ -69,6 +72,7 @@ export const MOCK_PRODUCTS: ProductBatch[] = [
   },
   {
     supplierId: 'supp_vnm_01',
+    country: 'Vietnam',
     title: 'Woven Seagrass Tote Bag',
     category: 'Bags',
     description: 'Eco-friendly and stylish tote bag, handwoven from natural seagrass by skilled artisans in Vietnam. Perfect for beach trips or daily errands.',
@@ -76,7 +80,7 @@ export const MOCK_PRODUCTS: ProductBatch[] = [
     specs: { 'Dimensions': '40cm x 30cm x 15cm', 'Strap Drop': '25cm' },
     moq: 40,
     leadTimeDays: 30,
-    images: ['https://images.unsplash.com/photo-1571524953344-3dbe736b56a3?q=80&w=1974&auto=format&fit=crop', 'https://images.unsplash.com/photo-1621457190022-72124505118d?q=80&w=1932&auto=format&fit=crop'],
+    images: ['/assets/product-seagrass-tote-01.jpg', '/assets/product-seagrass-tote-02.jpg'],
     productId: 'prod_003',
     id: 'batch_003',
     qtyAvailable: 80,
@@ -86,6 +90,7 @@ export const MOCK_PRODUCTS: ProductBatch[] = [
   },
   {
     supplierId: 'supp_ind_01',
+    country: 'India',
     title: 'Hand-Blocked Print Fabric',
     category: 'Textiles',
     description: '100% cotton fabric featuring intricate floral motifs, hand-printed by artisans in Jaipur using traditional wooden blocks and natural dyes.',
@@ -93,7 +98,7 @@ export const MOCK_PRODUCTS: ProductBatch[] = [
     specs: { 'Width': '44 inches', 'GSM': '150', 'Pattern': 'Paisley Bloom' },
     moq: 100, // in meters
     leadTimeDays: 28,
-    images: ['https://images.unsplash.com/photo-1620722398431-1522497da814?q=80&w=1974&auto=format&fit=crop', 'https://images.unsplash.com/photo-1620722399139-2c13d7881ac1?q=80&w=1974&auto=format&fit=crop'],
+    images: ['/assets/product-block-fabric-01.jpg', '/assets/product-block-fabric-02.jpg'],
     productId: 'prod_008',
     id: 'batch_008',
     qtyAvailable: 1000, // in meters
@@ -103,6 +108,7 @@ export const MOCK_PRODUCTS: ProductBatch[] = [
   },
   {
     supplierId: 'supp_ken_02',
+    country: 'Kenya',
     title: 'Beaded Maasai Leather Belt',
     category: 'Textile Accessories',
     description: 'Authentic Maasai belt made with genuine leather and hand-applied glass beads. Each belt tells a story through its intricate patterns and colors.',
@@ -110,7 +116,7 @@ export const MOCK_PRODUCTS: ProductBatch[] = [
     specs: { 'Width': '1.5 inches', 'Sizes': 'S, M, L, XL' },
     moq: 20,
     leadTimeDays: 18,
-    images: ['https://images.unsplash.com/photo-1628149298486-ff8a5a51930b?q=80&w=1964&auto=format&fit=crop', 'https://images.unsplash.com/photo-1628149298492-5954605b058a?q=80&w=1964&auto=format&fit=crop'],
+    images: ['/assets/product-maasai-belt-01.jpg', '/assets/product-maasai-belt-02.jpg'],
     productId: 'prod_004',
     id: 'batch_004',
     qtyAvailable: 120,
@@ -120,6 +126,7 @@ export const MOCK_PRODUCTS: ProductBatch[] = [
   },
   {
     supplierId: 'supp_gha_01',
+    country: 'Ghana',
     title: 'Shea Butter & Baobab Soap',
     category: 'Natural Soaps',
     description: 'Cold-pressed natural soap bar enriched with raw shea butter and baobab oil from Ghana. Deeply moisturizing and suitable for all skin types.',
@@ -127,7 +134,7 @@ export const MOCK_PRODUCTS: ProductBatch[] = [
     specs: { 'Weight': '150g', 'Scent': 'Unscented, natural' },
     moq: 100,
     leadTimeDays: 25,
-    images: ['https://images.unsplash.com/photo-1600958933254-6e65b71948ba?q=80&w=1974&auto=format&fit=crop', 'https://images.unsplash.com/photo-1626332195869-aa5e4c4f39e3?q=80&w=1974&auto=format&fit=crop'],
+    images: ['/assets/product-shea-soap-01.jpg', '/assets/product-shea-soap-02.jpg'],
     productId: 'prod_005',
     id: 'batch_005',
     qtyAvailable: 500,
@@ -137,6 +144,7 @@ export const MOCK_PRODUCTS: ProductBatch[] = [
   },
   {
     supplierId: 'supp_per_01',
+    country: 'Peru',
     title: 'Baby Alpaca Wool Throw',
     category: 'Home Goods',
     description: 'Incredibly soft and warm throw blanket woven from 100% baby alpaca wool from the Peruvian Andes. Hypoallergenic and lightweight.',
@@ -144,7 +152,7 @@ export const MOCK_PRODUCTS: ProductBatch[] = [
     specs: { 'Dimensions': '130cm x 180cm', 'Weight': '500g', 'Color': 'Heather Grey' },
     moq: 15,
     leadTimeDays: 35,
-    images: ['https://images.unsplash.com/photo-1620917609289-1a4a2f87f43e?q=80&w=1964&auto=format&fit=crop', 'https://images.unsplash.com/photo-1616625807424-41a4a4752c16?q=80&w=1964&auto=format&fit=crop'],
+    images: ['/assets/product-alpaca-throw-01.jpg', '/assets/product-alpaca-throw-02.jpg'],
     productId: 'prod_009',
     id: 'batch_009',
     qtyAvailable: 60,
@@ -154,6 +162,7 @@ export const MOCK_PRODUCTS: ProductBatch[] = [
   },
   {
     supplierId: 'supp_nga_02',
+    country: 'Nigeria',
     title: 'Recycled Brass Cast Earrings',
     category: 'Jewelry',
     description: 'Stunning earrings cast from recycled brass using ancient lost-wax techniques. Bold, geometric design inspired by West African symbolism.',
@@ -161,7 +170,7 @@ export const MOCK_PRODUCTS: ProductBatch[] = [
     specs: { 'Length': '5cm', 'Fastening': 'Hook' },
     moq: 30,
     leadTimeDays: 20,
-    images: ['https://images.unsplash.com/photo-1611652033959-8a52dc085a1e?q=80&w=1974&auto=format&fit=crop', 'https://images.unsplash.com/photo-1611652033931-489434407883?q=80&w=1974&auto=format&fit=crop'],
+    images: ['/assets/product-brass-earrings-01.jpg', '/assets/product-brass-earrings-02.jpg'],
     productId: 'prod_006',
     id: 'batch_006',
     qtyAvailable: 75,
@@ -170,3 +179,71 @@ export const MOCK_PRODUCTS: ProductBatch[] = [
     mlQualityScore: 'C',
   },
 ];
+
+export const MOCK_SUPPLIER_STORIES: Record<string, { title: string, content: string, image: string }> = {
+    'supp_ken_01': {
+        title: 'The Unbroken Thread of Nairobi Leather',
+        image: '/assets/story-leather.jpg',
+        content: `In the bustling heart of Nairobi, a stone's throw from the vibrant Maasai Market, lies the workshop of the Nairobi Leather Artisans. This is not a factory in the modern sense; it's a sanctuary of heritage. Here, the air is thick with the rich scent of vegetable-tanned leather and the rhythmic tap-tap-tap of artisans at work. Led by Joseph Kariuki, a third-generation leatherworker, the collective preserves techniques that have been passed down since his grandfather's time. "Leather is in our blood," Joseph says, his hands deftly guiding a needle through a thick hide. "Each stitch tells a story of our past, and each wallet we create carries that story into the future." They source their hides from local tanneries that practice sustainable methods, ensuring that every piece is not only beautiful but also ethical. For them, this is more than a business—it's a cultural duty to keep the thread of their heritage unbroken.`
+    },
+    'supp_nga_01': {
+        title: 'Adire: Painting with Indigo and Starlight',
+        image: '/assets/story-indigo.jpg',
+        content: `The city of Osogbo in Nigeria is a global epicenter of Yoruba culture, and it is here that Adire Indigo Textiles was born. Adire is a resist-dyeing technique that transforms simple cloth into a canvas of intricate patterns, using indigo dye derived from local plants. Funmilayo Adebayo, the matriarch of the collective, speaks of the process with reverence. "We don't just dye cloth; we are communing with the spirit of the indigo," she explains. The patterns are not random; they are a visual language, representing proverbs, historical events, and cosmic myths. Some patterns, she notes, are meant to evoke the night sky, making each scarf a piece of wearable starlight. The process is laborious, involving tying, stitching, or waxing the cloth before it's submerged in the deep blue dye pits. The result is a textile that is vibrant, unique, and deeply infused with the soul of Nigerian art.`
+    }
+};
+
+
+export const MOCK_ANALYTICS_V2: AnalyticsV2 = {
+    conversionFunnels: [
+        { stage: 'SKU Views', count: 12450 },
+        { stage: 'Detail Page Visits', count: 4880 },
+        { stage: 'Favorites', count: 975 },
+        { stage: 'Negotiations Started', count: 320 },
+        { stage: 'Orders Placed', count: 128 },
+    ],
+    geoDemographics: [
+        { country: 'United States', countryCode: 'US', views: 4320 },
+        { country: 'United Kingdom', countryCode: 'GB', views: 1890 },
+        { country: 'Germany', countryCode: 'DE', views: 1230 },
+        { country: 'France', countryCode: 'FR', views: 980 },
+        { country: 'Canada', countryCode: 'CA', views: 850 },
+        { country: 'Australia', countryCode: 'AU', views: 640 },
+        { country: 'Japan', countryCode: 'JP', views: 510 },
+    ],
+    topPerformingSkus: [
+        { skuId: 'batch_001', skuTitle: 'Hand-Stitched Leather Wallet', views: 2890, favorites: 215, orders: 45 },
+        { skuId: 'batch_007', skuTitle: 'Moroccan Leather Pouf', views: 2540, favorites: 180, orders: 32 },
+        { skuId: 'batch_009', skuTitle: 'Baby Alpaca Wool Throw', views: 2110, favorites: 250, orders: 28 },
+        { skuId: 'batch_002', skuTitle: 'Adire Patterned Silk Scarf', views: 1850, favorites: 110, orders: 15 },
+    ]
+};
+
+export const MOCK_TREND_DATA: MarketTrendData = {
+    trendingCategories: [
+        { name: 'Home Goods', change: 15.2 },
+        { name: 'Jewelry', change: 12.8 },
+        { name: 'Textile Accessories', change: 8.5 },
+        { name: 'Bags', change: -3.1 },
+        { name: 'Natural Soaps', change: -5.7 },
+    ],
+    inDemandMaterials: [
+        { name: 'Alpaca Wool', change: 22.4 },
+        { name: 'Recycled Brass', change: 18.9 },
+        { name: 'Seagrass', change: 14.1 },
+        { name: 'Natural Dyes', change: 9.8 },
+        { name: 'Goatskin Leather', change: -2.5 },
+    ],
+    globalPriceShifts: {
+        'Home Goods': [
+            { month: 'Jan', avgPrice: 42.50 }, { month: 'Feb', avgPrice: 43.10 },
+            { month: 'Mar', avgPrice: 43.00 }, { month: 'Apr', avgPrice: 44.50 },
+            { month: 'May', avgPrice: 45.20 }, { month: 'Jun', avgPrice: 45.80 },
+        ],
+        'Textile Accessories': [
+            { month: 'Jan', avgPrice: 21.80 }, { month: 'Feb', avgPrice: 21.90 },
+            { month: 'Mar', avgPrice: 22.50 }, { month: 'Apr', avgPrice: 22.30 },
+            { month: 'May', avgPrice: 22.00 }, { month: 'Jun', avgPrice: 21.70 },
+        ]
+    }
+};

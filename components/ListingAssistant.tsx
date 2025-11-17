@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { getListingSuggestions } from '../services/geminiService';
 import { ListingSuggestions } from '../types';
 import { MOCK_SUPPLIERS } from '../constants'; // Using mock for country info
@@ -11,7 +11,7 @@ interface ListingAssistantProps {
 
 const LoadingSpinner: React.FC = () => (
     <div className="flex justify-center items-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-lime"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
     </div>
 );
 
@@ -43,8 +43,8 @@ const ListingAssistant: React.FC<ListingAssistantProps> = ({ productData, onAppl
   };
 
   return (
-    <div className="p-4 border border-dark-gray bg-black/20">
-      <p className="text-sm text-medium-gray mb-4">
+    <div className="p-4 border border-border bg-surface-2">
+      <p className="text-sm text-text-muted mb-4">
         Use Gemini to enhance your product listing. Based on your inputs and market data, the AI will suggest an optimized title, description, and keywords.
       </p>
       
@@ -53,7 +53,7 @@ const ListingAssistant: React.FC<ListingAssistantProps> = ({ productData, onAppl
             <button
                 onClick={fetchSuggestions}
                 disabled={!productData.title || !productData.description}
-                className="px-6 py-2 bg-primary-cyan text-black font-bold border-2 border-black disabled:bg-dark-gray disabled:text-medium-gray disabled:cursor-not-allowed"
+                className="px-6 py-2 bg-secondary text-black font-bold border-2 border-secondary/50 disabled:bg-surface-1 disabled:text-text-muted disabled:cursor-not-allowed"
             >
                 GENERATE SUGGESTIONS
             </button>
@@ -64,40 +64,40 @@ const ListingAssistant: React.FC<ListingAssistantProps> = ({ productData, onAppl
       {isLoading && (
          <div>
             <LoadingSpinner />
-            <p className="mt-2 text-center text-xs text-medium-gray">Analyzing market data & generating listing...</p>
+            <p className="mt-2 text-center text-xs text-text-muted">Analyzing market data & generating listing...</p>
         </div>
       )}
       
       {suggestions && (
         <div className="space-y-4 text-sm">
             <div>
-                <h4 className="font-bold text-primary-cyan">LOCATION INSIGHT</h4>
-                <p className="text-xs italic text-medium-gray">{suggestions.locationInsight}</p>
+                <h4 className="font-bold text-secondary">LOCATION INSIGHT</h4>
+                <p className="text-xs italic text-text-muted">{suggestions.locationInsight}</p>
             </div>
             <div>
-                <h4 className="font-bold text-primary-cyan">SUGGESTED TITLE</h4>
-                <div className="p-2 bg-black/30 border border-dark-gray flex justify-between items-center">
+                <h4 className="font-bold text-secondary">SUGGESTED TITLE</h4>
+                <div className="p-2 bg-background border border-border flex justify-between items-center text-text-base">
                     <p>{suggestions.suggestedTitle}</p>
-                    <button onClick={() => onApplySuggestion('title', suggestions.suggestedTitle)} className="text-xs bg-dark-gray px-2 py-1 hover:bg-primary-lime hover:text-black">APPLY</button>
+                    <button onClick={() => onApplySuggestion('title', suggestions.suggestedTitle)} className="text-xs bg-surface-2 px-2 py-1 hover:bg-primary hover:text-black">APPLY</button>
                 </div>
             </div>
              <div>
-                <h4 className="font-bold text-primary-cyan">SUGGESTED DESCRIPTION</h4>
-                <div className="p-2 bg-black/30 border border-dark-gray">
+                <h4 className="font-bold text-secondary">SUGGESTED DESCRIPTION</h4>
+                <div className="p-2 bg-background border border-border text-text-base">
                     <p className="mb-2">{suggestions.suggestedDescription}</p>
-                    <button onClick={() => onApplySuggestion('description', suggestions.suggestedDescription)} className="text-xs bg-dark-gray px-2 py-1 hover:bg-primary-lime hover:text-black">APPLY</button>
+                    <button onClick={() => onApplySuggestion('description', suggestions.suggestedDescription)} className="text-xs bg-surface-2 px-2 py-1 hover:bg-primary hover:text-black">APPLY</button>
                 </div>
             </div>
              <div>
-                <h4 className="font-bold text-primary-cyan">SUGGESTED KEYWORDS</h4>
+                <h4 className="font-bold text-secondary">SUGGESTED KEYWORDS</h4>
                 <div className="flex flex-wrap gap-2">
                     {suggestions.suggestedKeywords.map(kw => (
-                        <span key={kw} className="bg-dark-gray text-primary-lime text-xs px-2 py-1">{kw}</span>
+                        <span key={kw} className="bg-surface-1 text-primary text-xs px-2 py-1">{kw}</span>
                     ))}
                 </div>
             </div>
             <div className="text-center">
-                <button onClick={fetchSuggestions} className="text-xs text-primary-cyan hover:underline">Regenerate</button>
+                <button onClick={fetchSuggestions} className="text-xs text-secondary hover:underline">Regenerate</button>
             </div>
         </div>
       )}

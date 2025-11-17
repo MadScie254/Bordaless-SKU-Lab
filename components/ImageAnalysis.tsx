@@ -19,7 +19,7 @@ const fileToBase64 = (file: File): Promise<string> => {
 
 const LoadingSpinner: React.FC = () => (
     <div className="flex justify-center items-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-lime"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
     </div>
 );
 
@@ -52,31 +52,31 @@ const ImageAnalysis: React.FC<ImageAnalysisProps> = ({ imageFile, onAnalysisComp
   }, [imageFile]);
 
   return (
-    <div className="p-4 border border-dark-gray bg-black/20 min-h-[200px] flex items-center justify-center">
+    <div className="p-4 border border-border bg-surface-2 min-h-[200px] flex items-center justify-center">
       {isLoading && (
         <div>
             <LoadingSpinner />
-            <p className="mt-4 text-center text-medium-gray">Analyzing image with Gemini... Please wait.</p>
+            <p className="mt-4 text-center text-text-muted">Analyzing image with Gemini... Please wait.</p>
         </div>
       )}
       {error && <p className="text-red-500">{error}</p>}
       {result && (
         <div className="text-left w-full">
-            <h4 className="text-lg font-bold text-primary-cyan mb-3">Analysis Complete</h4>
+            <h4 className="text-lg font-bold text-secondary mb-3">Analysis Complete</h4>
             <div className="flex items-baseline gap-4 mb-3">
-                <span className="text-medium-gray">ML QUALITY SCORE:</span>
-                <span className={`text-4xl font-bold ${result.qualityScore === 'A' || result.qualityScore === 'B' ? 'text-primary-lime' : 'text-yellow-400'}`}>
+                <span className="text-text-muted">ML QUALITY SCORE:</span>
+                <span className={`text-4xl font-bold ${result.qualityScore === 'A' || result.qualityScore === 'B' ? 'text-primary' : 'text-yellow-400'}`}>
                     {result.qualityScore}
                 </span>
             </div>
             
-            <p className="text-medium-gray">OBSERVED ISSUES:</p>
+            <p className="text-text-muted">OBSERVED ISSUES:</p>
             {result.issues.length > 0 ? (
-                <ul className="list-disc list-inside text-sm space-y-1">
+                <ul className="list-disc list-inside text-sm space-y-1 text-text-base">
                     {result.issues.map((issue, index) => <li key={index}>{issue}</li>)}
                 </ul>
             ) : (
-                <p className="text-sm">No significant issues detected.</p>
+                <p className="text-sm text-text-base">No significant issues detected.</p>
             )}
         </div>
       )}

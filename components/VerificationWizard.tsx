@@ -1,6 +1,5 @@
-
 import React, { useState, useCallback } from 'react';
-import { ProductBatch, QualityAnalysisResult, ListingSuggestions } from '../types';
+import { ProductBatch, QualityAnalysisResult } from '../types';
 import Modal from './Modal';
 import ImageAnalysis from './ImageAnalysis';
 import ListingAssistant from './ListingAssistant';
@@ -50,6 +49,9 @@ const VerificationWizard: React.FC<VerificationWizardProps> = ({ onClose, onProd
     const now = Date.now();
     const newProduct: ProductBatch = {
       supplierId: 'supp_current_user',
+      // FIX: Added missing 'country' property to satisfy the ProductBatch type.
+      // Mocking country as there is no supplier context providing this information.
+      country: 'Kenya',
       title: formData.title,
       category: formData.category,
       description: formData.description,
@@ -69,19 +71,20 @@ const VerificationWizard: React.FC<VerificationWizardProps> = ({ onClose, onProd
   };
   
   const renderStep = () => {
+    const inputClasses = "w-full bg-background p-2 border border-border text-text-base focus:border-primary outline-none";
     switch (step) {
       case 1:
         return (
           <div>
-            <h3 className="text-xl font-bold mb-4 text-primary-cyan">Step 1: Product Details</h3>
+            <h3 className="text-xl font-bold mb-4 text-secondary">Step 1: Product Details</h3>
             <div className="space-y-4">
-              <input name="title" value={formData.title} onChange={handleInputChange} placeholder="Product Title" className="w-full bg-dark-bg p-2 border border-dark-gray focus:border-primary-lime outline-none" />
-              <input name="category" value={formData.category} onChange={handleInputChange} placeholder="Category (e.g., Textile Accessories)" className="w-full bg-dark-bg p-2 border border-dark-gray focus:border-primary-lime outline-none" />
-              <textarea name="description" value={formData.description} onChange={handleInputChange} placeholder="Description" className="w-full bg-dark-bg p-2 border border-dark-gray focus:border-primary-lime outline-none" rows={4}></textarea>
+              <input name="title" value={formData.title} onChange={handleInputChange} placeholder="Product Title" className={inputClasses} />
+              <input name="category" value={formData.category} onChange={handleInputChange} placeholder="Category (e.g., Textile Accessories)" className={inputClasses} />
+              <textarea name="description" value={formData.description} onChange={handleInputChange} placeholder="Description" className={inputClasses} rows={4}></textarea>
               <div className="grid grid-cols-3 gap-4">
-                <input name="moq" value={formData.moq} onChange={handleInputChange} placeholder="MOQ" type="number" className="w-full bg-dark-bg p-2 border border-dark-gray focus:border-primary-lime outline-none" />
-                <input name="unitPriceUSD" value={formData.unitPriceUSD} onChange={handleInputChange} placeholder="Unit Price (USD)" type="number" className="w-full bg-dark-bg p-2 border border-dark-gray focus:border-primary-lime outline-none" />
-                <input name="qtyAvailable" value={formData.qtyAvailable} onChange={handleInputChange} placeholder="Quantity Available" type="number" className="w-full bg-dark-bg p-2 border border-dark-gray focus:border-primary-lime outline-none" />
+                <input name="moq" value={formData.moq} onChange={handleInputChange} placeholder="MOQ" type="number" className={inputClasses} />
+                <input name="unitPriceUSD" value={formData.unitPriceUSD} onChange={handleInputChange} placeholder="Unit Price (USD)" type="number" className={inputClasses} />
+                <input name="qtyAvailable" value={formData.qtyAvailable} onChange={handleInputChange} placeholder="Quantity Available" type="number" className={inputClasses} />
               </div>
             </div>
           </div>
@@ -89,7 +92,7 @@ const VerificationWizard: React.FC<VerificationWizardProps> = ({ onClose, onProd
        case 2:
         return (
           <div>
-            <h3 className="text-xl font-bold mb-4 text-primary-cyan flex items-center gap-2"><SparklesIcon />Step 2: AI Listing Assistant (Optional)</h3>
+            <h3 className="text-xl font-bold mb-4 text-secondary flex items-center gap-2"><SparklesIcon />Step 2: AI Listing Assistant (Optional)</h3>
              <ListingAssistant
               productData={formData}
               onApplySuggestion={applySuggestion}
@@ -99,16 +102,16 @@ const VerificationWizard: React.FC<VerificationWizardProps> = ({ onClose, onProd
       case 3:
         return (
           <div>
-            <h3 className="text-xl font-bold mb-4 text-primary-cyan">Step 3: Upload QC Photo</h3>
-            <p className="text-sm text-medium-gray mb-4">Upload a clear, well-lit photo of one unit from the batch for ML quality analysis.</p>
+            <h3 className="text-xl font-bold mb-4 text-secondary">Step 3: Upload QC Photo</h3>
+            <p className="text-sm text-text-muted mb-4">Upload a clear, well-lit photo of one unit from the batch for ML quality analysis.</p>
             <input id="file-upload" type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
-            <label htmlFor="file-upload" className="w-full h-64 border-2 border-dashed border-dark-gray flex flex-col items-center justify-center cursor-pointer hover:border-primary-lime bg-black/20">
+            <label htmlFor="file-upload" className="w-full h-64 border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:border-primary bg-surface-2">
               {imagePreview ? (
                 <img src={imagePreview} alt="Preview" className="max-h-full max-w-full" />
               ) : (
                 <>
                   <CameraIcon />
-                  <span className="mt-2">Click to Upload Image</span>
+                  <span className="mt-2 text-text-muted">Click to Upload Image</span>
                 </>
               )}
             </label>
@@ -117,25 +120,25 @@ const VerificationWizard: React.FC<VerificationWizardProps> = ({ onClose, onProd
       case 4:
         return (
           <div>
-            <h3 className="text-xl font-bold mb-4 text-primary-cyan">Step 4: ML Quality Analysis</h3>
+            <h3 className="text-xl font-bold mb-4 text-secondary">Step 4: ML Quality Analysis</h3>
             {imageFile ? (
               <ImageAnalysis imageFile={imageFile} onAnalysisComplete={setAnalysisResult} />
             ) : (
-              <p className="text-medium-gray">Please go back and upload an image first.</p>
+              <p className="text-text-muted">Please go back and upload an image first.</p>
             )}
           </div>
         );
       case 5:
          return (
           <div>
-            <h3 className="text-xl font-bold mb-4 text-primary-cyan flex items-center gap-2"><CheckCircleIcon />Final Step: Review &amp; Submit</h3>
-            <p className="text-medium-gray mb-4">Review the details and submit your SKU for verification.</p>
-            <div className="space-y-2 text-sm border border-dark-gray p-4 bg-black/20">
+            <h3 className="text-xl font-bold mb-4 text-secondary flex items-center gap-2"><CheckCircleIcon />Final Step: Review &amp; Submit</h3>
+            <p className="text-text-muted mb-4">Review the details and submit your SKU for verification.</p>
+            <div className="space-y-2 text-sm border border-border p-4 bg-surface-2">
               <p><strong>Title:</strong> {formData.title}</p>
               <p><strong>Category:</strong> {formData.category}</p>
               <p><strong>MOQ:</strong> {formData.moq}</p>
               <p><strong>Unit Price:</strong> ${formData.unitPriceUSD}</p>
-              <p><strong>ML Quality Score:</strong> <span className="font-bold text-primary-lime">{analysisResult?.qualityScore || "N/A"}</span></p>
+              <p><strong>ML Quality Score:</strong> <span className="font-bold text-primary">{analysisResult?.qualityScore || "N/A"}</span></p>
             </div>
           </div>
          );
@@ -149,7 +152,7 @@ const VerificationWizard: React.FC<VerificationWizardProps> = ({ onClose, onProd
         <div className="mt-8 flex justify-between items-center">
           <div>
             {step > 1 && (
-              <button onClick={() => setStep(s => s - 1)} className="px-6 py-2 border border-dark-gray hover:bg-dark-gray">BACK</button>
+              <button onClick={() => setStep(s => s - 1)} className="px-6 py-2 border border-border hover:bg-surface-2">BACK</button>
             )}
           </div>
           <div>
@@ -157,12 +160,12 @@ const VerificationWizard: React.FC<VerificationWizardProps> = ({ onClose, onProd
               <button
                 onClick={() => setStep(s => s + 1)}
                 disabled={(step === 3 && !imageFile) || (step === 4 && !analysisResult)}
-                className="px-6 py-2 bg-primary-cyan text-black font-bold border-2 border-black disabled:bg-dark-gray disabled:text-medium-gray disabled:cursor-not-allowed"
+                className="px-6 py-2 bg-secondary text-black font-bold border-2 border-secondary/50 disabled:bg-surface-2 disabled:text-text-muted disabled:cursor-not-allowed"
               >
                 NEXT
               </button>
             ) : (
-               <button onClick={handleSubmit} className="px-6 py-2 bg-primary-lime text-black font-bold border-2 border-black hover:bg-black hover:text-primary-lime hover:border-primary-lime">
+               <button onClick={handleSubmit} className="px-6 py-2 bg-primary text-black font-bold border-2 border-primary/50 hover:bg-background hover:text-primary hover:border-primary">
                  SUBMIT SKU
                </button>
             )}

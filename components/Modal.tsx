@@ -12,12 +12,12 @@ const Modal: React.FC<ModalProps> = ({ title, onClose, children }) => {
   return (
     <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center animate-fade-in" onClick={onClose}>
       <div 
-        className="bg-dark-bg border-2 border-primary-lime text-light-gray w-full max-w-2xl shadow-brutalist-cyan"
+        className="bg-surface-glass backdrop-blur-lg border border-primary/50 text-text-base w-full max-w-2xl shadow-glow-secondary animate-scale-in"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-between items-center p-4 border-b-2 border-primary-lime">
-          <h2 className="text-2xl font-bold text-primary-cyan">{title}</h2>
-          <button onClick={onClose} className="text-primary-lime hover:text-white">
+        <div className="flex justify-between items-center p-4 border-b border-primary/50">
+          <h2 className="text-2xl font-bold text-secondary">{title}</h2>
+          <button onClick={onClose} className="text-primary hover:opacity-80 transition-opacity">
             <CloseIcon />
           </button>
         </div>

@@ -1,45 +1,92 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Borderless SKU Lab</title>
+    <title>Danco Analytics</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              mono: ['"IBM Plex Mono"', 'monospace'],
-            },
-            colors: {
-              'primary-lime': '#DFFF00',
-              'primary-cyan': '#00FFFF',
-              'dark-bg': '#0C0C0C',
-              'light-gray': '#F5F5F5',
-              'medium-gray': '#A0A0A0',
-              'dark-gray': '#2A2A2A'
-            },
-            boxShadow: {
-              'brutalist': '5px 5px 0px 0px rgba(223, 255, 0, 1)',
-              'brutalist-cyan': '5px 5px 0px 0px rgba(0, 255, 255, 1)',
-            }
-          }
-        }
+    
+    <!-- Audio preloads -->
+    <link rel="preload" href="/assets/sound-click.mp3" as="audio">
+    <link rel="preload" href="/assets/sound-toggle-on.mp3" as="audio">
+    <link rel="preload" href="/assets/sound-toggle-off.mp3" as="audio">
+    <link rel="preload" href="/assets/sound-add-favorite.mp3" as="audio">
+    <link rel="preload" href="/assets/sound-search.mp3" as="audio">
+
+    <style>
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+      @keyframes pageTransitionIn {
+        from { opacity: 0; transform: scale(0.98); } 
+        to { opacity: 1; transform: scale(1); }
       }
+
+      :root, [data-theme="dark"] {
+        --color-bg: #0A0A0A;
+        --color-text-base: #EAEAEA;
+        --color-text-muted: #999999;
+        --color-primary: #DFFF00; /* Lime */
+        --color-secondary: #00FFFF; /* Cyan */
+        --color-border: #2A2A2A;
+        --color-surface-1: #141414;
+        --color-surface-2: #1A1A1A;
+        --color-surface-glass: rgba(20, 20, 20, 0.7);
+        --color-shadow-primary: rgba(223, 255, 0, 0.5);
+        --color-shadow-secondary: rgba(0, 255, 255, 0.5);
+        --bg-pattern-url: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%231a1a1a' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+      }
+
+      [data-theme="light"] {
+        --color-bg: #F5F5F5;
+        --color-text-base: #1A1A1A;
+        --color-text-muted: #666666;
+        --color-primary: #A2B300; /* Darker Lime */
+        --color-secondary: #00A2A2; /* Darker Cyan */
+        --color-border: #DCDCDC;
+        --color-surface-1: #FFFFFF;
+        --color-surface-2: #FAFAFA;
+        --color-surface-glass: rgba(255, 255, 255, 0.7);
+        --color-shadow-primary: rgba(162, 179, 0, 0.4);
+        --color-shadow-secondary: rgba(0, 162, 162, 0.4);
+        --bg-pattern-url: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23e0e0e0' fill-opacity='0.6' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+      }
+
+      body {
+        background-color: var(--color-bg);
+        color: var(--color-text-base);
+        background-image: var(--bg-pattern-url);
+        font-family: 'IBM Plex Mono', monospace;
+        cursor: url('/assets/cursor-default.svg'), auto;
+      }
+      a, button, input[type="checkbox"], label, select, .cursor-pointer {
+        cursor: url('/assets/cursor-pointer.svg'), pointer;
+      }
+      img, [data-cursor="zoom"] {
+        cursor: url('/assets/cursor-zoom.svg'), zoom-in;
+      }
+      
+    </style>
+    <script>
+      // Immediately sets theme to prevent FOUC (Flash of Unstyled Content)
+      (function() {
+        const theme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
     </script>
   <script type="importmap">
 {
   "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.0",
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0"
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.0",
+    "three": "https://aistudiocdn.com/three@^0.166.0",
+    "@react-three/fiber": "https://aistudiocdn.com/@react-three/fiber@^8.16.0",
+    "@react-three/drei": "https://aistudiocdn.com/@react-three/drei@^9.108.0"
   }
 }
 </script>
@@ -47,5 +94,38 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              mono: ['IBM Plex Mono', 'monospace'],
+            },
+            colors: {
+              background: 'var(--color-bg)',
+              'text-base': 'var(--color-text-base)',
+              'text-muted': 'var(--color-text-muted)',
+              primary: 'var(--color-primary)',
+              secondary: 'var(--color-secondary)',
+              border: 'var(--color-border)',
+              surface: {
+                1: 'var(--color-surface-1)',
+                2: 'var(--color-surface-2)',
+                glass: 'var(--color-surface-glass)',
+              }
+            },
+            boxShadow: {
+              'glow-primary': '0 0 15px var(--color-shadow-primary)',
+              'glow-secondary': '0 0 15px var(--color-shadow-secondary)',
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.5s ease-out forwards',
+              'scale-in': 'scaleIn 0.3s ease-out forwards',
+              'page-transition': 'pageTransitionIn 0.4s ease-out forwards',
+            }
+          }
+        }
+      }
+    </script>
   </body>
 </html>

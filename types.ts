@@ -1,4 +1,3 @@
-
 export interface User {
   id: string;
   name: string;
@@ -21,6 +20,7 @@ export interface Product {
   supplierId: string;
   title: string;
   category: string;
+  country: string;
   description: string;
   materials: string[];
   specs: Record<string, string>;
@@ -28,6 +28,7 @@ export interface Product {
   leadTimeDays: number;
   images: string[];
   videoUrl?: string;
+  modelUrl?: string;
 }
 
 export interface Batch {
@@ -51,4 +52,68 @@ export interface ListingSuggestions {
     suggestedDescription: string;
     suggestedKeywords: string[];
     locationInsight: string;
+}
+
+export interface SearchFilters {
+    searchTerm?: string;
+    countries?: string[];
+    category?: string;
+    maxPrice?: number;
+    minPrice?: number;
+    maxMoq?: number;
+    minMoq?: number;
+    sortBy?: 'price_asc' | 'price_desc' | 'quality_asc';
+}
+
+// New Types for V2 features
+
+export type OrderStatus = 'Production' | 'QC' | 'Packaging' | 'Export Prep' | 'Shipped';
+
+export interface Order {
+  id: string;
+  product: ProductBatch;
+  status: OrderStatus;
+}
+
+export interface FunnelData {
+  stage: string;
+  count: number;
+}
+
+export interface GeoData {
+  country: string;
+  countryCode: string;
+  views: number;
+}
+
+export interface SkuPerformanceData {
+  skuId: string;
+  skuTitle: string;
+  views: number;
+  favorites: number;
+  orders: number;
+}
+
+export interface AnalyticsV2 {
+  conversionFunnels: FunnelData[];
+  geoDemographics: GeoData[];
+  topPerformingSkus: SkuPerformanceData[];
+}
+
+export interface Trend {
+    name: string;
+    change: number; // percentage change
+}
+
+export interface PriceShift {
+    month: string;
+    avgPrice: number;
+}
+
+export interface MarketTrendData {
+    trendingCategories: Trend[];
+    inDemandMaterials: Trend[];
+    globalPriceShifts: {
+        [category: string]: PriceShift[];
+    }
 }

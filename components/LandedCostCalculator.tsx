@@ -29,28 +29,30 @@ const LandedCostCalculator: React.FC<LandedCostCalculatorProps> = ({ product }) 
     return { productCost, shippingCost, dutiesAndTaxes, insuranceCost, totalLandedCost };
   }, [quantity, product.unitPriceUSD]);
 
+  const inputClasses = "w-full bg-background text-text-base p-2 border border-border focus:border-primary outline-none";
+
   return (
-    <div className="border border-dark-gray p-4">
-      <h3 className="text-lg font-bold text-primary-cyan mb-3 flex items-center gap-2"><TruckIcon />ESTIMATED LANDED COST</h3>
+    <div className="border border-border bg-surface-1 p-4">
+      <h3 className="text-lg font-bold text-secondary mb-3 flex items-center gap-2"><TruckIcon />ESTIMATED LANDED COST</h3>
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
-          <label htmlFor="quantity" className="block text-xs text-medium-gray mb-1">QUANTITY</label>
+          <label htmlFor="quantity" className="block text-xs text-text-muted mb-1">QUANTITY</label>
           <input
             type="number"
             id="quantity"
             min={product.moq}
             value={quantity}
             onChange={handleQuantityChange}
-            className="w-full bg-black p-2 border border-dark-gray focus:border-primary-lime outline-none"
+            className={inputClasses}
           />
         </div>
         <div>
-          <label htmlFor="destination" className="block text-xs text-medium-gray mb-1">DESTINATION</label>
+          <label htmlFor="destination" className="block text-xs text-text-muted mb-1">DESTINATION</label>
           <select
             id="destination"
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
-            className="w-full bg-black p-2 border border-dark-gray focus:border-primary-lime outline-none"
+            className={inputClasses}
           >
             <option>USA</option>
             <option>EU</option>
@@ -62,24 +64,24 @@ const LandedCostCalculator: React.FC<LandedCostCalculatorProps> = ({ product }) 
       {quantity >= product.moq && (
         <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-                <span className="text-medium-gray">Product Cost:</span>
-                <span>${calculatedCosts.productCost.toFixed(2)}</span>
+                <span className="text-text-muted">Product Cost:</span>
+                <span className="text-text-base">${calculatedCosts.productCost.toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
-                <span className="text-medium-gray">Est. Shipping:</span>
-                <span>${calculatedCosts.shippingCost.toFixed(2)}</span>
+                <span className="text-text-muted">Est. Shipping:</span>
+                <span className="text-text-base">${calculatedCosts.shippingCost.toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
-                <span className="text-medium-gray">Est. Duties & Taxes:</span>
-                <span>${calculatedCosts.dutiesAndTaxes.toFixed(2)}</span>
+                <span className="text-text-muted">Est. Duties & Taxes:</span>
+                <span className="text-text-base">${calculatedCosts.dutiesAndTaxes.toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
-                <span className="text-medium-gray">Insurance:</span>
-                <span>${calculatedCosts.insuranceCost.toFixed(2)}</span>
+                <span className="text-text-muted">Insurance:</span>
+                <span className="text-text-base">${calculatedCosts.insuranceCost.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between text-lg border-t border-dark-gray pt-2 mt-2">
-                <span className="font-bold text-primary-lime">TOTAL LANDED COST:</span>
-                <span className="font-bold text-primary-lime">${calculatedCosts.totalLandedCost.toFixed(2)}</span>
+            <div className="flex justify-between text-lg border-t border-border pt-2 mt-2">
+                <span className="font-bold text-primary">TOTAL LANDED COST:</span>
+                <span className="font-bold text-primary">${calculatedCosts.totalLandedCost.toFixed(2)}</span>
             </div>
         </div>
       )}
