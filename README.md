@@ -2,15 +2,19 @@
 
 > **A workshop + intelligence system where SKUs are born, verified, optimized, and prepared for the market.**
 
-![banner](./GHBanner.png)
+<!-- Project image -->
+
+<p align="center">
+  <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Simple_cardboard_box.svg" alt="Simple cardboard box" width="720"/>
+</p>
+
+*Image credit*: "Simple cardboard box" — originally from Openclipart, author Bogdan Costea. Public domain (CC0).
 
 ---
 
 ## TL;DR
 
 Bordaless‑SKU‑Lab is an opinionated, AI‑powered playground for inventing, validating, and optimizing SKUs (product stock‑keeping units). It bundles a reactive front‑end with generative intelligence so teams can prototype product ideas, audit SKU metadata, run market fit tests, and prepare launch assets — all in one place.
-
-Open the live AI Studio preview: [https://ai.studio/apps/drive/1JTavCh-ZEXX2NtHCaJPJiY-DNrtRw1f3](https://ai.studio/apps/drive/1JTavCh-ZEXX2NtHCaJPJiY-DNrtRw1f3)
 
 ---
 
@@ -151,21 +155,3 @@ Created by: MadScie254
 Find me on GitHub: [https://github.com/MadScie254](https://github.com/MadScie254)
 
 ---
-
-### Want a bolder README style?
-
-Tell me: *"Give me Godmode README (aggressive & short)"* and I'll craft a compact, in‑your‑face landing README suitable for a hacker resume or job interview.
-
-*Generated README — tweak anything and I will update the canvas.*
-
-
-## Run Locally
-
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
